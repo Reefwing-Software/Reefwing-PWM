@@ -5,10 +5,11 @@
   @copyright  Please see the accompanying LICENSE file.
 
   Code:        David Such
-  Version:     1.0.1
-  Date:        17/08/23
+  Version:     1.0.2
+  Date:        18/08/23
 
-  1.0.1 Original Release.                         17/08/22
+  1.0.1 Original Release.                         17/08/23
+  1.0.2 Library Properties Updated.               18/08/23
 
 ******************************************************************/
 
