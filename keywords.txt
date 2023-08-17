@@ -1,11 +1,11 @@
 #######################################
-# Syntax Coloring Map
+# IDE Map for Reefwing PWM
 #######################################
 
 #######################################
 # Classes and datatypes (KEYWORD1)
 #######################################
-MD_PWM	KEYWORD1
+ReefwingPWM	KEYWORD1
 
 #######################################
 # Methods and functions (KEYWORD2)

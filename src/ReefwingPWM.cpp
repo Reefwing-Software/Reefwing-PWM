@@ -1,16 +1,17 @@
-#include <MD_PWM.h>
+#include <ReefwingPWM.h>
 
-/**
- * \file
- * \brief Code file for MD_PWM library class.
- */
+/******************************************************************
+ *
+ * ReefwingPWM Implementation - 
+ * 
+ ******************************************************************/
 
 // Global data
-bool MD_PWM::_bInitialised = false;       
-uint8_t MD_PWM::_cycleCount = 0;
-MD_PWM* MD_PWM::_cbInstance[MAX_PWM_PIN];
+bool ReefwingPWM::_bInitialised = false;       
+uint8_t ReefwingPWM::_cycleCount = 0;
+ReefwingPWM* ReefwingPWM::_cbInstance[MAX_PWM_PIN];
 
-MD_PWM::MD_PWM(uint8_t pin) : _pin(pin)
+ReefwingPWM::ReefwingPWM(uint8_t pin) : _pin(pin)
 { 
 #if USE_DIRECT_IO
   _outReg = portOutputRegister(digitalPinToPort(pin)); // output pin register
@@ -18,7 +19,7 @@ MD_PWM::MD_PWM(uint8_t pin) : _pin(pin)
 #endif
 };
 
-MD_PWM::~MD_PWM(void) 
+ReefwingPWM::~ReefwingPWM(void) 
 // Last one out the door turns out the lights
 { 
   if (disable())
@@ -28,7 +29,7 @@ MD_PWM::~MD_PWM(void)
   }
 }
 
-bool MD_PWM::begin(uint16_t freq)
+bool ReefwingPWM::begin(uint16_t freq)
 {
   PWMPRINT("\nbegin Freq:", freq);
 
@@ -55,7 +56,7 @@ bool MD_PWM::begin(uint16_t freq)
   return(enable());
 }
 
-bool MD_PWM::enable(void)
+bool ReefwingPWM::enable(void)
 // Enable the PWM on the pin instance
 {
   bool found = false;
@@ -76,7 +77,7 @@ bool MD_PWM::enable(void)
   return(found);
 }
 
-bool MD_PWM::disable(void)
+bool ReefwingPWM::disable(void)
 // Disable the PWM on the pin instance
 // Shuffle the instance table entries up to squish out empty slots
 {
@@ -101,7 +102,7 @@ bool MD_PWM::disable(void)
   return(_cbInstance[0] == nullptr);    // table is empty, last instance gone
 }
 
-void MD_PWM::setPin(void)
+void ReefwingPWM::setPin(void)
 // Handle the PWM counting and timing digital transitions
 // This is called as part of the ISR instance handling
 {
@@ -136,16 +137,16 @@ ISR(TIMER1_OVF_vect)
 ISR(TIMER2_OVF_vect)
 #endif
 {
-  for (uint8_t i = 0; i < MD_PWM::MAX_PWM_PIN; i++)
+  for (uint8_t i = 0; i < ReefwingPWM::MAX_PWM_PIN; i++)
   {
-    if (MD_PWM::_cbInstance[i] == nullptr)
+    if (ReefwingPWM::_cbInstance[i] == nullptr)
       break;      // None left - just exit
-    MD_PWM::_cbInstance[i]->setPin();
+    ReefwingPWM::_cbInstance[i]->setPin();
   }
-  MD_PWM::_cycleCount++;
+  ReefwingPWM::_cycleCount++;
 }
 
-inline void MD_PWM::setTimerMode(void)
+inline void ReefwingPWM::setTimerMode(void)
 {
 #if USE_TIMER == 1
   TCCR1B = _BV(WGM13);
@@ -156,7 +157,7 @@ inline void MD_PWM::setTimerMode(void)
 #endif
 }
 
-void MD_PWM::setFrequency(uint32_t freq)
+void ReefwingPWM::setFrequency(uint32_t freq)
 // Set the timer to count closest to the required frequency * 256.
 {
   uint8_t scale = 0;
@@ -208,7 +209,7 @@ void MD_PWM::setFrequency(uint32_t freq)
 #endif
 }
 
-inline void MD_PWM::attachISR(void)
+inline void ReefwingPWM::attachISR(void)
 // Start the timer and enable interrupt
 {
   // set timer overflow interrupt enable bit
@@ -222,7 +223,7 @@ inline void MD_PWM::attachISR(void)
   sei();                // interrupts globally enabled
 }
 
-inline void MD_PWM::detachISR(void)
+inline void ReefwingPWM::detachISR(void)
 // Stop the timer interrupt 
 {
   // clears timer overflow interrupt enable bit 
@@ -235,7 +236,7 @@ inline void MD_PWM::detachISR(void)
 #endif
 }
 
-inline void MD_PWM::stop(void)
+inline void ReefwingPWM::stop(void)
 // Stop the timer
 {
   // clears all clock selects bits
